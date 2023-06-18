@@ -1,6 +1,7 @@
 package org.example.context;
 
 
+import org.example.beanGetter.BeanGetter;
 import org.example.factories.BeanFactory;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ApplicationContext {
+public class ApplicationContext implements BeanGetter {
     private BeanFactory beanFactory;
     private final Map<Class<?>, Object> beanCache = new HashMap<>();
 
@@ -24,6 +25,7 @@ public class ApplicationContext {
         return beans;
     }
 
+    @Override
     public <T> T getBean(Class<T> beanClass) {
         if (beanCache.containsKey(beanClass)) {
             return (T) beanCache.get(beanClass);

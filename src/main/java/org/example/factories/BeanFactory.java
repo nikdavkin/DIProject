@@ -1,18 +1,20 @@
 package org.example.factories;
 
 import org.example.annotations.NotSpringAutowired;
+import org.example.beanGetter.BeanGetter;
 import org.example.context.ApplicationContext;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 
-public class BeanFactory {
-    private final ApplicationContext applicationContext;
+public class BeanFactory implements BeanGetter {
+    private final BeanGetter applicationContext;
 
     public BeanFactory(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
     }
 
+    @Override
     public <T> T getBean(Class<T> beanClass) {
         try {
             T bean = beanClass.getDeclaredConstructor().newInstance();
