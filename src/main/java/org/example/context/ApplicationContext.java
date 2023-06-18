@@ -17,9 +17,9 @@ public class ApplicationContext implements BeanGetter {
         this.beanFactory = beanFactory;
     }
 
-    public <T> List<T> getBeans(List<Class<? extends T>> beanClass) {
+    public <T> List<T> getBeans(List<Class<? extends T>> beanClasses) {
         List<T> beans = new ArrayList<>();
-        for (Class<? extends T> clazz : beanClass) {
+        for (Class<? extends T> clazz : beanClasses) {
             beans.add(getBean(clazz));
         }
         return beans;
