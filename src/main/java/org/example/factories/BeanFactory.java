@@ -1,20 +1,15 @@
 package org.example.factories;
 
 import org.example.annotations.NotSpringAutowired;
-import org.example.beanGetter.BeanGetter;
-import org.example.context.ApplicationContext;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 
-public class BeanFactory implements BeanGetter {
-    private final BeanGetter applicationContext;
+public class BeanFactory {
+    private final Map<Class<?>, Object> beanCache = new HashMap<>();
 
-    public BeanFactory(ApplicationContext applicationContext) {
-        this.applicationContext = applicationContext;
-    }
-
-    @Override
     public <T> T getBean(Class<T> beanClass) {
         try {
             T bean = beanClass.getDeclaredConstructor().newInstance();
@@ -22,7 +17,13 @@ public class BeanFactory implements BeanGetter {
             for (Field field : fields) {
                 if (field.isAnnotationPresent(NotSpringAutowired.class)) {
                     field.setAccessible(true);
-                    field.set(bean, applicationContext.getBean(field.getType()));
+                    if (beanCache.containsKey(field.getType())) {
+                        field.set(bean, beanCache.get(field.getType()));
+                    } else {
+                        T cacheBean = (T) getBean(field.getType());
+                        field.set(bean, cacheBean);
+                        beanCache.put(field.getType(), cacheBean);
+                    }
                 }
             }
             return bean;
