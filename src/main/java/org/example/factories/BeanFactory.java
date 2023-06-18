@@ -13,10 +13,10 @@ public class BeanFactory {
         this.applicationContext = applicationContext;
     }
 
-    public <T> T getBean(Class<T> tClass) {
+    public <T> T getBean(Class<T> beanClass) {
         try {
-            T bean = tClass.getDeclaredConstructor().newInstance();
-            Field[] fields = tClass.getDeclaredFields();
+            T bean = beanClass.getDeclaredConstructor().newInstance();
+            Field[] fields = beanClass.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(NotSpringAutowired.class)) {
                     field.setAccessible(true);

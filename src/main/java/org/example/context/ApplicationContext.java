@@ -10,26 +10,26 @@ import java.util.Map;
 
 public class ApplicationContext {
     private BeanFactory beanFactory;
-    private final Map<Class<?>, Object> cache = new HashMap<>();
+    private final Map<Class<?>, Object> beanCache = new HashMap<>();
 
     public void setBeanFactory(BeanFactory beanFactory) {
         this.beanFactory = beanFactory;
     }
 
-    public <T> List<T> getBeans(List<Class<? extends T>> tClass) {
-        List<T> newList = new ArrayList<>();
-        for (Class<? extends T> clazz : tClass) {
-            newList.add(getBean(clazz));
+    public <T> List<T> getBeans(List<Class<? extends T>> beanClass) {
+        List<T> beans = new ArrayList<>();
+        for (Class<? extends T> clazz : beanClass) {
+            beans.add(getBean(clazz));
         }
-        return newList;
+        return beans;
     }
 
-    public <T> T getBean(Class<T> tClass) {
-        if (cache.containsKey(tClass)) {
-            return (T) cache.get(tClass);
+    public <T> T getBean(Class<T> beanClass) {
+        if (beanCache.containsKey(beanClass)) {
+            return (T) beanCache.get(beanClass);
         }
-        T bean = beanFactory.getBean(tClass);
-        cache.put(tClass, bean);
+        T bean = beanFactory.getBean(beanClass);
+        beanCache.put(beanClass, bean);
         return bean;
     }
 }
